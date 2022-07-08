@@ -33,7 +33,6 @@ export async function registerProduct(req, res) {
 
 }
 
-
 export async function getProducts(req, res) {
     
     const session = res.locals.session;
@@ -50,3 +49,34 @@ export async function getProducts(req, res) {
     }
 
 }
+
+export async function deleteOneShopping(req, res) {
+    try {
+        console.log("vamos deletar")
+        const { produtoId } = req.params;
+        console.log(produtoId)
+        const shoppingColection = db.collection("shoppingcart");
+		await shoppingColection.deleteOne({ produtoId: produtoId })
+        return res.status(201).send("deletamos");
+    }catch(erro) {
+        console.log("deu ruim")
+        res.sendStatus(422)
+        return
+    }
+}
+
+export async function deleteManyShopping(req, res) {
+    try {
+        console.log("vamos deletar vários")
+        const { userId } = req.params;
+        console.log(userId)
+        const shoppingColection = db.collection("shoppingcart");
+		await shoppingColection.deleteMany({ userId: userId })
+       return res.status(201).send("deletamos");
+    }catch(erro) {
+        console.log("deu ruim")
+        res.sendStatus(422)
+        return
+    }
+}
+
