@@ -32,3 +32,21 @@ export async function registerProduct(req, res) {
     }
 
 }
+
+
+export async function getProducts(req, res) {
+    
+    const session = res.locals.session;
+   
+    try {
+
+        const products = await db.collection('shoppingcart').find({userId: session.userId}).toArray();
+
+        res.send(products);
+    
+    } catch (error) {
+
+        res.sendStatus(500);
+    }
+
+}
