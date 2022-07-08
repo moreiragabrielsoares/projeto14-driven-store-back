@@ -75,13 +75,13 @@ export async function loginUser(req, res) {
             if (spacePosition > -1) {
                 userFirstName = userFirstName.slice(0 , spacePosition);
             }
-            
+            let user = userDB._id.valueOf()
             await db.collection('sessions').insertOne({
             token,
             userId: userDB._id
             });
 
-            res.status(201).send({ token: token, name: userFirstName });
+            res.status(201).send({ token: token, name: userFirstName, userId: user });
             return;
 
         } else {

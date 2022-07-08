@@ -19,9 +19,9 @@ export async function listProducts(req, res) {
 export async function listShopping(req, res) {
     try {
         const { authorization } = req.headers;
-        console.log(authorization)
+        //console.log(authorization)
         const token = authorization?.replace('Bearer ', '');
-        console.log(token)
+        //console.log(token)
             if(!token) {
                 return res.sendStatus(401);
             }
@@ -31,13 +31,13 @@ export async function listShopping(req, res) {
         if (!session) {
         return res.sendStatus(401)
         }    
-        console.log(session)
-        //const teste = objectId(session.userId) //tentei valueOf, value e .str
-        //console.log(teste)
+        const {userId} = session
 
+        console.log(session)
+        
         //preciso retornar apenas as compras do shoppingcart que pertencerem ao ID do usuário
         const shopping = await db.collection('shoppingcart').find({ userId: session.userId }).toArray();
-        console.log(shopping)
+        
         if (shopping.length === 0) {
            return res.status(422).send("Não encontramos compras nesse ID"); 
         }
@@ -55,7 +55,7 @@ export async function listShopping(req, res) {
 export async function postShopping(req, res) {
     try{
         await db.collection('shoppingcart').insertOne(req.body) 
-        res.sendStatus(201)
+       return res.sendStatus(201)
     }catch(erro) {
         console.log("deu ruim")
         res.sendStatus(422)
@@ -63,16 +63,33 @@ export async function postShopping(req, res) {
     }
 }
 
-export async function deleteShopping(req, res) {
+export async function deleteOneShopping(req, res) {
     try {
         console.log("vamos deletar")
-        const { image } = req.params;
-        console.log(image)
-        //const shoppingColection = db.collection("shoppingcart");
-		//await shoppingColection.deleteOne({ _id: new ObjectId(id) })
+        const { produtoId } = req.params;
+        console.log(produtoId)
+        const shoppingColection = db.collection("shoppingcart");
+		await shoppingColection.deleteOne({ produtoId: produtoId })
+        return res.status(201).send("deletamos");
     }catch(erro) {
         console.log("deu ruim")
         res.sendStatus(422)
         return
     }
 }
+
+export async function deleteManyShopping(req, res) {
+    try {
+        console.log("vamos deletar vários")
+        const { userId } = req.params;
+        console.log(userId)
+        const shoppingColection = db.collection("shoppingcart");
+		await shoppingColection.deleteMany({ userId: userId })
+       return res.status(201).send("deletamos");
+    }catch(erro) {
+        console.log("deu ruim")
+        res.sendStatus(422)
+        return
+    }
+}
+
