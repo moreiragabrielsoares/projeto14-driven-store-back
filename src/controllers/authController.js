@@ -90,7 +90,7 @@ export async function loginUser(req, res) {
         }
 
     } catch (error) {
-        res.sendStatus(500);
+       return res.sendStatus(500);
     }
 
 }
