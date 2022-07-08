@@ -81,7 +81,7 @@ export async function loginUser(req, res) {
             userId: userDB._id
             });
 
-            res.status(201).send({ token: token, name: userFirstName });
+            res.status(201).send({ token: token, name: userFirstName , userId: userDB._id});
             return;
 
         } else {
