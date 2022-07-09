@@ -78,10 +78,10 @@ export async function loginUser(req, res) {
             
             await db.collection('sessions').insertOne({
             token,
-            userId: userDB._id
+            email: user.email
             });
 
-            res.status(201).send({ token: token, name: userFirstName , userId: userDB._id});
+            res.status(201).send({ token: token, name: userFirstName , email: user.email});
             return;
 
         } else {
