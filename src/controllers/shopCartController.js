@@ -53,10 +53,10 @@ export async function getProducts(req, res) {
 export async function deleteOneShopping(req, res) {
     try {
         console.log("vamos deletar")
-        const { produtoId } = req.params;
-        console.log(produtoId)
+        const { productId } = req.params;
+        console.log(productId)
         const shoppingColection = db.collection("shoppingcart");
-		await shoppingColection.deleteOne({ produtoId: produtoId })
+		await shoppingColection.deleteOne({ productId: productId })
         return res.status(201).send("deletamos");
     }catch(erro) {
         console.log("deu ruim")

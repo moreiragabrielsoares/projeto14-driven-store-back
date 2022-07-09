@@ -6,7 +6,7 @@ const router = Router();
 //esse get produto é aquela minha função listShopping
 router.post('/shoppingcart', validateUser, registerProduct);
 router.get('/shoppingcart', validateUser, getProducts);
-router.delete('/shoppingcart/:produtoId', deleteOneShopping);
+router.delete('/shoppingcart/:productId', deleteOneShopping);
 router.post('/ordersmade', postOrdersmade)
 
 export default router;
