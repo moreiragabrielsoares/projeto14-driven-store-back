@@ -2,6 +2,7 @@ import bcrypt from 'bcrypt';
 import { v4 as uuid } from 'uuid';
 import { db } from '../databases/mongodb.js';
 import joi from 'joi';
+import jwt from 'jsonwebtoken';
 
 export async function signUpUser(req, res) {
   
@@ -10,7 +11,7 @@ export async function signUpUser(req, res) {
     const userSchema = joi.object({
         name: joi.string().required(),
         email: joi.string().email().required(),
-        password: joi.string().required(),
+        password: joi.string().pattern(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[$*&@#])[0-9a-zA-Z$*&@#]{8,}$/).required(),
         confirmPassword: joi.string().required()
     });
 
@@ -42,8 +43,6 @@ export async function signUpUser(req, res) {
     } catch (error) {
         res.sendStatus(500);
     }
-
-    
 }
 
 export async function loginUser(req, res) {
@@ -67,7 +66,10 @@ export async function loginUser(req, res) {
         const userDB = await db.collection('users').findOne({ email: user.email });
 
         if (userDB && bcrypt.compareSync(user.password, userDB.password)) {
-            const token = uuid();
+           
+            const chave = process.env.JWT_SECRET;
+            const configuracoes = { expiresIn: 60*60*24*30 }
+            const token = jwt.sign({ name: userDB.name }, chave, configuracoes); 
 
             let userFirstName = userDB.name;
             userFirstName = userFirstName.trim();
@@ -90,7 +92,7 @@ export async function loginUser(req, res) {
         }
 
     } catch (error) {
-        res.sendStatus(500);
+        return res.sendStatus(500);
     }
 
 }
