@@ -43,8 +43,6 @@ export async function signUpUser(req, res) {
     } catch (error) {
         res.sendStatus(500);
     }
-
-    
 }
 
 export async function loginUser(req, res) {
@@ -72,8 +70,6 @@ export async function loginUser(req, res) {
             const chave = process.env.JWT_SECRET;
             const configuracoes = { expiresIn: 60*60*24*30 }
             const token = jwt.sign({ name: userDB.name }, chave, configuracoes); 
-
-            //const token = uuid();
 
             let userFirstName = userDB.name;
             userFirstName = userFirstName.trim();
